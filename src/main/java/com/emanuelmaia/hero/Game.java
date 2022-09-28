@@ -38,6 +38,10 @@ public class Game {
         screen.refresh();
     }
 
+    private void moveHero(Position position) {
+        hero.setPosition(position);
+    }
+
     private boolean processKey(com.googlecode.lanterna.input.KeyStroke key) throws IOException {
         System.out.println(key);
 
@@ -51,16 +55,16 @@ public class Game {
 
         switch(key.getKeyType()) {
             case ArrowUp:
-                hero.moveUp();
+                moveHero(hero.moveUp());
                 break;
             case ArrowDown:
-                hero.moveDown();
+                moveHero(hero.moveDown());
                 break;
             case ArrowLeft:
-                hero.moveLeft();
+                moveHero(hero.moveLeft());
                 break;
             case ArrowRight:
-                hero.moveRight();
+                moveHero(hero.moveRight());
                 break;
         }
 
