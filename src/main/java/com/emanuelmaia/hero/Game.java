@@ -13,11 +13,16 @@ import java.io.IOException;
 import java.security.Key;
 
 public class Game {
+
     public Screen screen;
+
     Hero hero = new Hero(10, 10);
+
+    Arena arena = new Arena(79, 23);
+
     public Game() {
         try {
-            TerminalSize terminalSize = new TerminalSize(40, 20);
+            TerminalSize terminalSize = new TerminalSize(arena.getWidth(), arena.getHeight());
             DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
 
             Terminal terminal = new DefaultTerminalFactory().createTerminal();
@@ -38,8 +43,19 @@ public class Game {
         screen.refresh();
     }
 
-    private void moveHero(Position position) {
-        hero.setPosition(position);
+    public void moveHero(Position position) {
+        if(canHeroMove(position)) {
+            hero.setPosition(position);
+        }
+    }
+
+    public boolean canHeroMove(Position position) {
+        if (position.getX() < 0 || position.getX() > arena.getWidth()
+                || position.getY() < 0 || position.getY() > arena.getHeight()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     private boolean processKey(com.googlecode.lanterna.input.KeyStroke key) throws IOException {
