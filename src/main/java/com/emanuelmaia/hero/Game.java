@@ -14,8 +14,7 @@ import java.security.Key;
 
 public class Game {
     public Screen screen;
-    private int x = 10;
-    private int y = 10;
+    Hero hero = new Hero(10, 10);
     public Game() {
         try {
             TerminalSize terminalSize = new TerminalSize(40, 20);
@@ -35,7 +34,7 @@ public class Game {
 
     private void draw() throws IOException {
         screen.clear();
-        screen.setCharacter(x, y, TextCharacter.fromCharacter('X')[0]);
+        hero.draw(screen);
         screen.refresh();
     }
 
@@ -52,16 +51,16 @@ public class Game {
 
         switch(key.getKeyType()) {
             case ArrowUp:
-                y--;
+                hero.moveUp();
                 break;
             case ArrowDown:
-                y++;
+                hero.moveDown();
                 break;
             case ArrowLeft:
-                x--;
+                hero.moveLeft();
                 break;
             case ArrowRight:
-                x++;
+                hero.moveRight();
                 break;
         }
 
