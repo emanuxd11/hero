@@ -36,8 +36,8 @@ public class Arena {
     public void draw(TextGraphics graphics) {
         graphics.fillRectangle(new TerminalPosition(0, 0), new
                 TerminalSize(width * 1, height * 1), ' ');
-        /*for (Wall wall : walls)
-            wall.draw(graphics);*/
+        for (Wall wall : walls)
+            wall.draw(graphics);
         hero.draw(graphics);
     }
 
