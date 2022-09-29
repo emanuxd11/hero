@@ -19,14 +19,15 @@ public class Game {
 
     public Screen screen;
 
-    Arena arena = new Arena(39, 11);
+    Arena arena = new Arena(80, 24);
 
     public Game() {
         try {
             TerminalSize terminalSize = new TerminalSize(arena.getWidth(), arena.getHeight());
-            DefaultTerminalFactory terminalFactory = new DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
+            DefaultTerminalFactory terminalFactory = new
+                    DefaultTerminalFactory().setInitialTerminalSize(terminalSize);
+            Terminal terminal = terminalFactory.createTerminal();
 
-            Terminal terminal = new DefaultTerminalFactory().createTerminal();
             screen = new TerminalScreen(terminal);
 
             TextGraphics graphics = screen.newTextGraphics();
