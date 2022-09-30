@@ -77,19 +77,31 @@ public class Arena {
     }
 
     public boolean canHeroMove(Position position) {
-        return position.getX() >= 1 && position.getX() <= width - 2
-                && position.getY() >= 1 && position.getY() <= height - 2;
+        /*return position.getX() >= 1 && position.getX() <= width - 2
+                && position.getY() >= 1 && position.getY() <= height - 2;*/
+        for(Wall wall: walls) {
+            /*if(wall.getPosition().getX() == position.getX() &&
+            wall.getPosition().getY() == position.getY()) {
+                return false;
+            }*/
+
+            if(wall.getPosition().equals(position)) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     private List<Wall> createWalls() {
         List<Wall> walls = new ArrayList<>();
 
-        for (int c = 0; c < width; c++) {
+        for(int c = 0; c < width; c++) {
             walls.add(new Wall(c, 0));
             walls.add(new Wall(c, height - 1));
         }
 
-        for (int r = 1; r < height - 1; r++) {
+        for(int r = 1; r < height - 1; r++) {
             walls.add(new Wall(0, r));
             walls.add(new Wall(width - 1, r));
         }
