@@ -8,7 +8,7 @@ public class Hero {
     private Position position;
 
     public Hero(int x, int y) {
-        position = new Position(x,y);
+        position = new Position(x, y);
     }
 
     public void setPosition(Position position) {
@@ -35,10 +35,14 @@ public class Hero {
     public void draw(TextGraphics graphics) {
         graphics.setForegroundColor(TextColor.Factory.fromString("#FFFF33"));
         graphics.enableModifiers(SGR.BOLD);
-        graphics.putString(new TerminalPosition(position.getX() * 2,
+
+        //For bigger hero
+        /*graphics.putString(new TerminalPosition(position.getX() * 2,
                 position.getY() * 2), "\\/");
         graphics.putString(new TerminalPosition(position.getX() * 2,
-                position.getY() * 2 + 1), "/\\");
+                position.getY() * 2 + 1), "/\\");*/
+
+        graphics.putString(new TerminalPosition(position.getX(), position.getY()), "X");
     }
 
 }

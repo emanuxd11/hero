@@ -35,9 +35,11 @@ public class Arena {
 
     public void draw(TextGraphics graphics) {
         graphics.fillRectangle(new TerminalPosition(0, 0), new
-                TerminalSize(width * 1, height * 1), ' ');
+                TerminalSize(width, height), ' ');
+
         for (Wall wall : walls)
             wall.draw(graphics);
+
         hero.draw(graphics);
     }
 
@@ -75,8 +77,8 @@ public class Arena {
     }
 
     public boolean canHeroMove(Position position) {
-        return position.getX() >= 0 && position.getX() <= width / 2 - 1
-                && position.getY() >= 0 && position.getY() <= height / 2 - 1;
+        return position.getX() >= 1 && position.getX() <= width - 2
+                && position.getY() >= 1 && position.getY() <= height - 2;
     }
 
     private List<Wall> createWalls() {
