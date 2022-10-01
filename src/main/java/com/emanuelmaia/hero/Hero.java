@@ -4,10 +4,11 @@ import com.googlecode.lanterna.*;
 import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
 
-public class Hero {
+public class Hero extends Element {
     private Position position;
 
     public Hero(int x, int y) {
+        super(x, y);
         position = new Position(x, y);
     }
 
@@ -45,4 +46,7 @@ public class Hero {
         graphics.putString(new TerminalPosition(position.getX(), position.getY()), "X");
     }
 
+    public Position getPosition() {
+        return position;
+    }
 }

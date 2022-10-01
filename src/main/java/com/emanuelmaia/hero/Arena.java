@@ -11,11 +11,13 @@ import com.googlecode.lanterna.screen.Screen;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class Arena {
-    private int width, height;
+    private final int width, height;
 
     private List<Wall> walls;
+    private List<Coin> coins;
 
     Hero hero = new Hero(10, 10);
 
@@ -23,6 +25,7 @@ public class Arena {
         this.width = width;
         this.height = height;
         this.walls = createWalls();
+        this.coins = createCoins();
     }
 
     public int getWidth() {
@@ -37,8 +40,12 @@ public class Arena {
         graphics.fillRectangle(new TerminalPosition(0, 0), new
                 TerminalSize(width, height), ' ');
 
-        for (Wall wall : walls)
+        for(Wall wall : walls)
             wall.draw(graphics);
+
+        for(Coin coin : coins){
+            coin.draw(graphics);
+        }
 
         hero.draw(graphics);
     }
@@ -73,18 +80,12 @@ public class Arena {
     public void moveHero(Position position) {
         if(canHeroMove(position)) {
             hero.setPosition(position);
+            this.retrieveCoins();
         }
     }
 
     public boolean canHeroMove(Position position) {
-        /*return position.getX() >= 1 && position.getX() <= width - 2
-                && position.getY() >= 1 && position.getY() <= height - 2;*/
         for(Wall wall: walls) {
-            /*if(wall.getPosition().getX() == position.getX() &&
-            wall.getPosition().getY() == position.getY()) {
-                return false;
-            }*/
-
             if(wall.getPosition().equals(position)) {
                 return false;
             }
@@ -105,7 +106,44 @@ public class Arena {
             walls.add(new Wall(0, r));
             walls.add(new Wall(width - 1, r));
         }
-
+        
         return walls;
+    }
+
+    private List<Coin> createCoins() {
+        Random random = new Random();
+        ArrayList<Coin> coins = new ArrayList<>();
+        Position coin_pos;
+        boolean keep_searching = false;
+
+        for(int i = 0; i < 5; i++) {
+            //Make sure coin doesn't spawn on top of hero
+            do {
+                coin_pos = new Position(random.nextInt(width - 2) + 1,
+                        random.nextInt(height - 2) + 1);
+
+                //Make sure it also doesn't spawn on top of another coin
+                for(Coin coin : coins) {
+                  if(coin_pos.equals(coin.getPosition())) {
+                      keep_searching = true;
+                      break;
+                  }
+                }
+
+            } while(coin_pos.equals(hero.getPosition()) && keep_searching);
+
+            coins.add(new Coin(coin_pos.getX(), coin_pos.getY()));
+        }
+
+        return coins;
+    }
+
+    private void retrieveCoins() {
+        for(Coin coin : coins) {
+            if(hero.getPosition().equals(coin.getPosition())) {
+                coins.remove(coin);
+                break;
+            }
+        }
     }
 }
