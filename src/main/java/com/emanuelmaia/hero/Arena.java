@@ -18,6 +18,7 @@ public class Arena {
 
     private List<Wall> walls;
     private List<Coin> coins;
+    private List<Monster> monsters;
 
     Hero hero = new Hero(10, 10);
 
@@ -26,6 +27,7 @@ public class Arena {
         this.height = height;
         this.walls = createWalls();
         this.coins = createCoins();
+        this.monsters = createMonsters();
     }
 
     public int getWidth() {
@@ -40,22 +42,27 @@ public class Arena {
         graphics.fillRectangle(new TerminalPosition(0, 0), new
                 TerminalSize(width, height), ' ');
 
-        for(Wall wall : walls)
+        for(Wall wall : walls) {
             wall.draw(graphics);
+        }
 
-        for(Coin coin : coins){
+        for(Coin coin : coins) {
             coin.draw(graphics);
+        }
+
+        for(Monster monster : monsters) {
+            monster.draw(graphics);
         }
 
         hero.draw(graphics);
     }
 
     public boolean processKey(KeyStroke key, Screen screen) throws IOException {
-        if(key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
+        if (key.getKeyType() == KeyType.Character && key.getCharacter() == 'q') {
             screen.close();
         }
 
-        if(key.getKeyType() == KeyType.EOF) {
+        if (key.getKeyType() == KeyType.EOF) {
             return false;
         }
 
@@ -78,15 +85,15 @@ public class Arena {
     }
 
     public void moveHero(Position position) {
-        if(canHeroMove(position)) {
+        if (canHeroMove(position)) {
             hero.setPosition(position);
             this.retrieveCoins();
         }
     }
 
     public boolean canHeroMove(Position position) {
-        for(Wall wall: walls) {
-            if(wall.getPosition().equals(position)) {
+        for (Wall wall : walls) {
+            if (wall.getPosition().equals(position)) {
                 return false;
             }
         }
@@ -97,16 +104,16 @@ public class Arena {
     private List<Wall> createWalls() {
         List<Wall> walls = new ArrayList<>();
 
-        for(int c = 0; c < width; c++) {
+        for (int c = 0; c < width; c++) {
             walls.add(new Wall(c, 0));
             walls.add(new Wall(c, height - 1));
         }
 
-        for(int r = 1; r < height - 1; r++) {
+        for (int r = 1; r < height - 1; r++) {
             walls.add(new Wall(0, r));
             walls.add(new Wall(width - 1, r));
         }
-        
+
         return walls;
     }
 
@@ -123,11 +130,11 @@ public class Arena {
                         random.nextInt(height - 2) + 1);
 
                 //Make sure it also doesn't spawn on top of another coin
-                for(Coin coin : coins) {
-                  if(coin_pos.equals(coin.getPosition())) {
-                      keep_searching = true;
-                      break;
-                  }
+                for (Coin coin : coins) {
+                    if (coin_pos.equals(coin.getPosition())) {
+                        keep_searching = true;
+                        break;
+                    }
                 }
 
             } while(coin_pos.equals(hero.getPosition()) && keep_searching);
@@ -139,11 +146,48 @@ public class Arena {
     }
 
     private void retrieveCoins() {
-        for(Coin coin : coins) {
-            if(hero.getPosition().equals(coin.getPosition())) {
+        for (Coin coin : coins) {
+            if (hero.getPosition().equals(coin.getPosition())) {
                 coins.remove(coin);
                 break;
             }
         }
+    }
+
+    private List<Monster> createMonsters() {
+        Random random = new Random();
+        ArrayList<Monster> monsters = new ArrayList<>();
+        Position monster_pos;
+        boolean keep_searching_c = false, keep_searching_m = false;
+
+        for(int i = 0; i < 5; i++) {
+            //Make sure coin doesn't spawn on top of hero
+            do {
+                monster_pos = new Position(random.nextInt(width - 2) + 1,
+                        random.nextInt(height - 2) + 1);
+
+                //Make sure it doesn't spawn on top of a coin
+                for (Coin coin : coins) {
+                    if (monster_pos.equals(coin.getPosition())) {
+                        keep_searching_c = true;
+                        break;
+                    }
+                }
+
+                //Make sure it also doesn't spawn on top of another monster
+                for (Monster monster : monsters) {
+                    if (monster_pos.equals(monster.getPosition())) {
+                        keep_searching_m = true;
+                        break;
+                    }
+                }
+
+            } while(monster_pos.equals(hero.getPosition()) &&
+                    keep_searching_c && keep_searching_m);
+
+            monsters.add(new Monster(monster_pos.getX(), monster_pos.getY()));
+        }
+
+        return monsters;
     }
 }
