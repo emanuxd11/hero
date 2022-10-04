@@ -19,7 +19,7 @@ public class Game {
 
     public Screen screen;
 
-    Arena arena = new Arena(80, 24);
+    Arena arena = new Arena(60, 24);
 
     public Game() {
         try {
@@ -29,17 +29,9 @@ public class Game {
             Terminal terminal = terminalFactory.createTerminal();
 
             screen = new TerminalScreen(terminal);
-
-            TextGraphics graphics = screen.newTextGraphics();
-            graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
-            graphics.fillRectangle(new TerminalPosition(0, 0),
-                    new TerminalSize(arena.getWidth(), arena.getHeight()), ' ');
-
             screen.setCursorPosition(null); // we don't need a cursor
             screen.startScreen(); // screens must be started
             screen.doResizeIfNecessary(); // resize screen if necessary
-            /*screen.clear();
-            screen.refresh();*/
 
         } catch(IOException e) {
             e.printStackTrace();

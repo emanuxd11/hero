@@ -39,6 +39,11 @@ public class Arena {
     }
 
     public void draw(TextGraphics graphics) {
+
+        graphics.setBackgroundColor(TextColor.Factory.fromString("#336699"));
+        graphics.fillRectangle(new TerminalPosition(0, 0),
+                new TerminalSize(width, height), ' ');
+
         graphics.fillRectangle(new TerminalPosition(0, 0), new
                 TerminalSize(width, height), ' ');
 
@@ -85,13 +90,15 @@ public class Arena {
     }
 
     public void moveHero(Position position) {
-        if (canHeroMove(position)) {
+        if(insideArena(position)) {
             hero.setPosition(position);
             this.retrieveCoins();
+            this.moveMonsters();
+            this.verifyMonsterCollisions();
         }
     }
 
-    public boolean canHeroMove(Position position) {
+    public boolean insideArena(Position position) {
         for (Wall wall : walls) {
             if (wall.getPosition().equals(position)) {
                 return false;
@@ -121,9 +128,10 @@ public class Arena {
         Random random = new Random();
         ArrayList<Coin> coins = new ArrayList<>();
         Position coin_pos;
-        boolean keep_searching = false;
+        boolean keep_searching;
 
         for(int i = 0; i < 5; i++) {
+            keep_searching = false;
             //Make sure coin doesn't spawn on top of hero
             do {
                 coin_pos = new Position(random.nextInt(width - 2) + 1,
@@ -158,9 +166,10 @@ public class Arena {
         Random random = new Random();
         ArrayList<Monster> monsters = new ArrayList<>();
         Position monster_pos;
-        boolean keep_searching_c = false, keep_searching_m = false;
+        boolean keep_searching_c, keep_searching_m;
 
         for(int i = 0; i < 5; i++) {
+            keep_searching_c = false; keep_searching_m = false;
             //Make sure coin doesn't spawn on top of hero
             do {
                 monster_pos = new Position(random.nextInt(width - 2) + 1,
@@ -189,5 +198,54 @@ public class Arena {
         }
 
         return monsters;
+    }
+
+    public void moveMonsters() {
+        boolean keep_searching_c, keep_searching_m;
+        Position potential_pos;
+
+        //can't be one of the coins' position, outside of map or on top of another monster
+        for(int i = 0, monstersSize = monsters.size(); i < monstersSize; i++) {
+            keep_searching_c = false; keep_searching_m = false;
+            Monster monster = monsters.get(i);
+
+            do {
+                potential_pos = monster.move();
+
+                //Comentado porque causa crash no jogo
+                /*for(Coin coin : coins) {
+                    if(coin.getPosition().equals(potential_pos)) {
+                        keep_searching_c = true;
+                        break;
+                    }
+                }*/
+
+                /*for(int j = 0; j < i; j++) {
+                    Monster curr_monster = monsters.get(j);
+                    if(potential_pos.equals(curr_monster.getPosition())) {
+                        keep_searching_m = true;
+                        break;
+                    }
+                }*/
+
+            } while(!insideArena(potential_pos));
+
+            monster.setPosition(potential_pos);
+        }
+    }
+
+    public void verifyMonsterCollisions() {
+        for (Monster monster : monsters) {
+            if (hero.getPosition().equals(monster.getPosition())) {
+                System.out.println("Game over!");
+                try {
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+                System.exit(0);
+                break;
+            }
+        }
     }
 }
