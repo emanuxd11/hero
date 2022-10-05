@@ -16,9 +16,9 @@ import java.util.Random;
 public class Arena {
     private final int width, height;
 
-    private List<Wall> walls;
-    private List<Coin> coins;
-    private List<Monster> monsters;
+    private final List<Wall> walls;
+    private final List<Coin> coins;
+    private final List<Monster> monsters;
 
     Hero hero = new Hero(10, 10);
 
@@ -169,15 +169,16 @@ public class Arena {
         boolean keep_searching_c, keep_searching_m;
 
         for(int i = 0; i < 5; i++) {
-            keep_searching_c = false; keep_searching_m = false;
             //Make sure coin doesn't spawn on top of hero
             do {
+                keep_searching_c = false; keep_searching_m = false;
+
                 monster_pos = new Position(random.nextInt(width - 2) + 1,
                         random.nextInt(height - 2) + 1);
 
                 //Make sure it doesn't spawn on top of a coin
                 for (Coin coin : coins) {
-                    if (monster_pos.equals(coin.getPosition())) {
+                    if(monster_pos.equals(coin.getPosition())) {
                         keep_searching_c = true;
                         break;
                     }
@@ -191,8 +192,8 @@ public class Arena {
                     }
                 }
 
-            } while(monster_pos.equals(hero.getPosition()) &&
-                    keep_searching_c && keep_searching_m);
+            } while(monster_pos.equals(hero.getPosition()) ||
+                    keep_searching_c || keep_searching_m);
 
             monsters.add(new Monster(monster_pos.getX(), monster_pos.getY()));
         }
@@ -204,31 +205,34 @@ public class Arena {
         boolean keep_searching_c, keep_searching_m;
         Position potential_pos;
 
-        //can't be one of the coins' position, outside of map or on top of another monster
+        //can't be:
+        // -on top of a coin
+        // -outside of map
+        // -on top of another monster
         for(int i = 0, monstersSize = monsters.size(); i < monstersSize; i++) {
-            keep_searching_c = false; keep_searching_m = false;
             Monster monster = monsters.get(i);
 
             do {
+                keep_searching_c = false; keep_searching_m = false;
                 potential_pos = monster.move();
 
                 //Comentado porque causa crash no jogo
-                /*for(Coin coin : coins) {
+                for(Coin coin : coins) {
                     if(coin.getPosition().equals(potential_pos)) {
                         keep_searching_c = true;
                         break;
                     }
-                }*/
+                }
 
-                /*for(int j = 0; j < i; j++) {
+                for(int j = 0; j < i; j++) {
                     Monster curr_monster = monsters.get(j);
                     if(potential_pos.equals(curr_monster.getPosition())) {
                         keep_searching_m = true;
                         break;
                     }
-                }*/
-
-            } while(!insideArena(potential_pos));
+                }
+            } while(!insideArena(potential_pos)
+                    || keep_searching_c || keep_searching_m);
 
             monster.setPosition(potential_pos);
         }
