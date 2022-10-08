@@ -99,7 +99,7 @@ public class Arena {
     }
 
     public boolean insideArena(Position position) {
-        for (Wall wall : walls) {
+        for(Wall wall : walls) {
             if (wall.getPosition().equals(position)) {
                 return false;
             }
@@ -159,6 +159,16 @@ public class Arena {
                 coins.remove(coin);
                 break;
             }
+        }
+
+        if (coins.size() == 0) {
+            System.out.println("You win!");
+            try {
+                Thread.sleep(1500);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
+            }
+            System.exit(0);
         }
     }
 
@@ -248,7 +258,6 @@ public class Arena {
                     throw new RuntimeException(e);
                 }
                 System.exit(0);
-                break;
             }
         }
     }
