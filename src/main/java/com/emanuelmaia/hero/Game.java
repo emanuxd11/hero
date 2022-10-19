@@ -17,11 +17,13 @@ import java.security.Key;
 
 public class Game {
 
-    public Screen screen;
+    private static Screen screen;
 
-    Arena arena = new Arena(60, 24);
+    private Arena arena;
 
     public Game() {
+        arena = new Arena(60, 24);
+
         try {
             TerminalSize terminalSize = new TerminalSize(arena.getWidth(), arena.getHeight());
             DefaultTerminalFactory terminalFactory = new

@@ -15,12 +15,11 @@ import java.util.Random;
 
 public class Arena {
     private final int width, height;
-
     private final List<Wall> walls;
     private final List<Coin> coins;
     private final List<Monster> monsters;
 
-    Hero hero = new Hero(10, 10);
+    private static final Hero hero = new Hero(10, 10);
 
     public Arena(int width, int height) {
         this.width = width;
@@ -178,7 +177,7 @@ public class Arena {
         Position monster_pos;
         boolean keep_searching_c, keep_searching_m;
 
-        for(int i = 0; i < 5; i++) {
+        for(int i = 0; i < 25; i++) {
             //Make sure coin doesn't spawn on top of hero
             do {
                 keep_searching_c = false; keep_searching_m = false;

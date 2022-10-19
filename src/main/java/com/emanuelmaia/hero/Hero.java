@@ -5,32 +5,29 @@ import com.googlecode.lanterna.graphics.TextGraphics;
 import com.googlecode.lanterna.screen.Screen;
 
 public class Hero extends Element {
-    private Position position;
-
     public Hero(int x, int y) {
         super(x, y);
-        position = new Position(x, y);
     }
 
     public void setPosition(Position position) {
-        this.position.setX(position.getX());
-        this.position.setY(position.getY());
+        position.setX(position.getX());
+        position.setY(position.getY());
     }
 
     public Position moveUp() {
-        return new Position(position.getX(), position.getY() - 1);
+        return new Position(getPosition().getX(), getPosition().getY() - 1);
     }
 
     public Position moveDown() {
-        return new Position(position.getX(), position.getY() + 1);
+        return new Position(getPosition().getX(), getPosition().getY() + 1);
     }
 
     public Position moveLeft() {
-        return new Position(position.getX() - 1, position.getY());
+        return new Position(getPosition().getX() - 1, getPosition().getY());
     }
 
     public Position moveRight() {
-        return new Position(position.getX() + 1, position.getY());
+        return new Position(getPosition().getX() + 1, getPosition().getY());
     }
 
     public void draw(TextGraphics graphics) {
@@ -43,10 +40,6 @@ public class Hero extends Element {
         graphics.putString(new TerminalPosition(position.getX() * 2,
                 position.getY() * 2 + 1), "/\\");*/
 
-        graphics.putString(new TerminalPosition(position.getX(), position.getY()), "X");
-    }
-
-    public Position getPosition() {
-        return position;
+        graphics.putString(new TerminalPosition(getPosition().getX(), getPosition().getY()), "X");
     }
 }
