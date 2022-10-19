@@ -15,18 +15,18 @@ import java.util.Random;
 
 public class Arena {
     private final int width, height;
-    private final List<Wall> walls;
-    private final List<Coin> coins;
-    private final List<Monster> monsters;
-
-    private static final Hero hero = new Hero(10, 10);
+    private static List<Wall> walls;
+    private static List<Coin> coins;
+    private static List<Monster> monsters;
+    private static Hero hero;
 
     public Arena(int width, int height) {
         this.width = width;
         this.height = height;
-        this.walls = createWalls();
-        this.coins = createCoins();
-        this.monsters = createMonsters();
+        hero = new Hero(10, 10);
+        walls = createWalls();
+        coins = createCoins();
+        monsters = createMonsters();
     }
 
     public int getWidth() {
@@ -137,7 +137,7 @@ public class Arena {
                         random.nextInt(height - 2) + 1);
 
                 //Make sure it also doesn't spawn on top of another coin
-                for (Coin coin : coins) {
+                for(Coin coin : coins) {
                     if (coin_pos.equals(coin.getPosition())) {
                         keep_searching = true;
                         break;

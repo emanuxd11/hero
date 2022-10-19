@@ -3,7 +3,6 @@ package com.emanuelmaia.hero;
 public class Position {
     private int x, y;
 
-
     public Position(int x, int y) {
         this.x = x;
         this.y = y;
@@ -32,6 +31,4 @@ public class Position {
         Position p = (Position) o;
         return x == p.getX() && y == p.getY();
     }
-
-
 }
