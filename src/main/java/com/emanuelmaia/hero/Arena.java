@@ -70,7 +70,7 @@ public class Arena {
             return false;
         }
 
-        switch (key.getKeyType()) {
+        switch(key.getKeyType()) {
             case ArrowUp:
                 moveHero(hero.moveUp());
                 break;
